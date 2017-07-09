@@ -137,7 +137,11 @@ func (tf *TemplateFunctions) DnsControllerArgv() ([]string, error) {
 
 	switch kops.CloudProviderID(tf.cluster.Spec.CloudProvider) {
 	case kops.CloudProviderAWS:
-		argv = append(argv, "--dns=aws-route53")
+		if strings.HasPrefix(os.Getenv("AWS_REGION"), "cn-") {
+			argv = append(argv, "--dns=gossip")
+		} else {
+			argv = append(argv, "--dns=aws-route53")
+		}
 	case kops.CloudProviderGCE:
 		argv = append(argv, "--dns=google-clouddns")
 	case kops.CloudProviderVSphere:
