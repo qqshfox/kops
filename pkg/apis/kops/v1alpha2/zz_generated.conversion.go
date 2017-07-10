@@ -867,6 +867,7 @@ func autoConvert_v1alpha2_DockerConfig_To_kops_DockerConfig(in *DockerConfig, ou
 	out.LogOpt = in.LogOpt
 	out.Storage = in.Storage
 	out.InsecureRegistry = in.InsecureRegistry
+	out.RegistryMirrors = in.RegistryMirrors
 	out.MTU = in.MTU
 	out.BridgeIP = in.BridgeIP
 	out.Version = in.Version
@@ -888,6 +889,7 @@ func autoConvert_kops_DockerConfig_To_v1alpha2_DockerConfig(in *kops.DockerConfi
 	out.LogOpt = in.LogOpt
 	out.Storage = in.Storage
 	out.InsecureRegistry = in.InsecureRegistry
+	out.RegistryMirrors = in.RegistryMirrors
 	out.MTU = in.MTU
 	out.BridgeIP = in.BridgeIP
 	out.Version = in.Version
@@ -1476,7 +1478,6 @@ func autoConvert_kops_KubeProxyConfig_To_v1alpha2_KubeProxyConfig(in *kops.KubeP
 	out.CPURequest = in.CPURequest
 	out.LogLevel = in.LogLevel
 	out.ClusterCIDR = in.ClusterCIDR
-	// WARNING: in.HostnameOverride requires manual conversion: does not exist in peer-type
 	out.Master = in.Master
 	return nil
 }

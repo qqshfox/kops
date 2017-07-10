@@ -165,3 +165,18 @@ On AWS, this is the id of the VPC the cluster is created in. If creating a clust
 spec:
   networkID: vpc-abcdefg1
 ```
+
+### registryMirrors
+
+If you have a bunch of Docker instances (physicsal or vm) running, each time one of them pulls an image that is not present on the host, it will fetch it from the internet (DockerHub). By caching these images, you can keep the traffic within your local network and avoid egress bandwidth usage.
+This setting benefits not only cluster provisioning but also image pulling.
+
+@see [Cache-Mirror Dockerhub For Speed](https://hackernoon.com/mirror-cache-dockerhub-locally-for-speed-f4eebd21a5ca)
+@see [Configure the Docker daemon](https://docs.docker.com/registry/recipes/mirror/#configure-the-docker-daemon).
+
+```yaml
+spec:
+  docker:
+    registryMirrors:
+    - https://registry.example.com
+```

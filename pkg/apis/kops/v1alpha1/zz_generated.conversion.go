@@ -785,6 +785,7 @@ func autoConvert_v1alpha1_DockerConfig_To_kops_DockerConfig(in *DockerConfig, ou
 	out.LogOpt = in.LogOpt
 	out.Storage = in.Storage
 	out.InsecureRegistry = in.InsecureRegistry
+	out.RegistryMirrors = in.RegistryMirrors
 	out.MTU = in.MTU
 	out.BridgeIP = in.BridgeIP
 	out.Version = in.Version
@@ -806,6 +807,7 @@ func autoConvert_kops_DockerConfig_To_v1alpha1_DockerConfig(in *kops.DockerConfi
 	out.LogOpt = in.LogOpt
 	out.Storage = in.Storage
 	out.InsecureRegistry = in.InsecureRegistry
+	out.RegistryMirrors = in.RegistryMirrors
 	out.MTU = in.MTU
 	out.BridgeIP = in.BridgeIP
 	out.Version = in.Version
