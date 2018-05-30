@@ -74,12 +74,12 @@ func (b *APILoadBalancerBuilder) Build(c *fi.ModelBuilderContext) error {
 			subnet := &b.Cluster.Spec.Subnets[i]
 
 			switch subnet.Type {
-			case kops.SubnetTypePublic, kops.SubnetTypeUtility:
+			case kops.SubnetTypePublic:
 				if lbSpec.Type != kops.LoadBalancerTypePublic {
 					continue
 				}
 
-			case kops.SubnetTypePrivate:
+			case kops.SubnetTypePrivate, kops.SubnetTypeUtility:
 				if lbSpec.Type != kops.LoadBalancerTypeInternal {
 					continue
 				}
@@ -330,11 +330,6 @@ func (b *APILoadBalancerBuilder) chooseBestSubnetForELB(zone string, subnets []*
 	}
 
 	migSubnets := sets.NewString()
-	for _, ig := range b.MasterInstanceGroups() {
-		for _, subnet := range ig.Spec.Subnets {
-			migSubnets.Insert(subnet)
-		}
-	}
 
 	var scoredSubnets []*scoredSubnet
 	for _, subnet := range subnets {
