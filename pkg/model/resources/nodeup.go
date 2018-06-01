@@ -41,6 +41,15 @@ NODEUP_HASH={{ NodeUpSourceHash }}
 {{ S3Env }}
 {{ AWS_REGION }}
 
+if [[ -e /etc/ntp.conf ]]; then
+  sed -i '0,/^server/s//server 169.254.169.123 prefer iburst\nserver/' /etc/ntp.conf
+  service ntp restart
+fi
+if [[ -e /etc/chrony/chrony.conf ]]; then
+  sed -i '0,/^server/s//server 169.254.169.123 prefer iburst\nserver/' /etc/chrony/chrony.conf
+  service chrony restart
+fi
+
 function ensure-install-dir() {
   INSTALL_DIR="/var/cache/kubernetes-install"
   # On ContainerOS, we install to /var/lib/toolbox install (because of noexec)
