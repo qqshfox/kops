@@ -99,7 +99,7 @@ endif
 
 .PHONY: kops-install # Install kops to local $GOPATH/bin
 kops-install: gobindata-tool ${BINDATA_TARGETS}
-	go install ${EXTRA_BUILDFLAGS} -ldflags "-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" k8s.io/kops/cmd/kops/
+	go install ${EXTRA_BUILDFLAGS} -ldflags=all="-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" k8s.io/kops/cmd/kops/
 
 .PHONY: channels-install # Install channels to local $GOPATH/bin
 channels-install: ${CHANNELS}
@@ -149,11 +149,11 @@ clean: # Remove build directory and bindata-generated files
 kops: ${KOPS}
 
 ${KOPS}: ${BINDATA_TARGETS} ${SOURCES}
-	go build ${EXTRA_BUILDFLAGS} -ldflags "-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/cmd/kops/
+	go build ${EXTRA_BUILDFLAGS} -ldflags=all="-X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA} ${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/cmd/kops/
 
 ${GOBINDATA}:
 	mkdir -p ${LOCAL}
-	go build ${EXTRA_BUILDFLAGS} -ldflags "${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/vendor/github.com/jteeuwen/go-bindata/go-bindata
+	go build ${EXTRA_BUILDFLAGS} -ldflags=all="${EXTRA_LDFLAGS}" -o $@ k8s.io/kops/vendor/github.com/jteeuwen/go-bindata/go-bindata
 
 .PHONY: gobindata-tool
 gobindata-tool: ${GOBINDATA}
@@ -207,7 +207,7 @@ test: ${BINDATA_TARGETS}  # Run tests locally
 .PHONY: ${DIST}/linux/amd64/nodeup
 ${DIST}/linux/amd64/nodeup: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/nodeup
+	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/nodeup
 
 .PHONY: crossbuild-nodeup
 crossbuild-nodeup: ${DIST}/linux/amd64/nodeup
@@ -221,17 +221,17 @@ crossbuild-nodeup-in-docker:
 .PHONY: ${DIST}/darwin/amd64/kops
 ${DIST}/darwin/amd64/kops: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=darwin GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=darwin GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
 
 .PHONY: ${DIST}/linux/amd64/kops
 ${DIST}/linux/amd64/kops: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
 
 .PHONY: ${DIST}/windows/amd64/kops.exe
 ${DIST}/windows/amd64/kops.exe: ${BINDATA_TARGETS}
 	mkdir -p ${DIST}
-	GOOS=windows GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
+	GOOS=windows GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o $@ -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops
 
 
 .PHONY: crossbuild
@@ -385,7 +385,7 @@ protokube-push: protokube-image
 nodeup: ${NODEUP}
 
 ${NODEUP}: ${BINDATA_TARGETS} ${SOURCES}
-	go build ${EXTRA_BUILDFLAGS} -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" -o $@ k8s.io/kops/cmd/nodeup
+	go build ${EXTRA_BUILDFLAGS} -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops.Version=${VERSION} -X k8s.io/kops.GitVersion=${GITSHA}" -o $@ k8s.io/kops/cmd/nodeup
 
 .PHONY: nodeup-dist
 nodeup-dist:
@@ -399,7 +399,7 @@ nodeup-dist:
 
 .PHONY: dns-controller-gocode
 dns-controller-gocode:
-	go install -tags 'peer_name_alternative peer_name_hash' -ldflags "${EXTRA_LDFLAGS} -X main.BuildVersion=${DNS_CONTROLLER_TAG}" k8s.io/kops/dns-controller/cmd/dns-controller
+	go install -tags 'peer_name_alternative peer_name_hash' -ldflags=all="${EXTRA_LDFLAGS} -X main.BuildVersion=${DNS_CONTROLLER_TAG}" k8s.io/kops/dns-controller/cmd/dns-controller
 
 .PHONY: dns-controller-builder-image
 dns-controller-builder-image:
@@ -521,7 +521,7 @@ ci: govet verify-gofmt verify-boilerplate nodeup examples test | verify-gendocs 
 channels: ${CHANNELS}
 
 ${CHANNELS}: ${SOURCES}
-	go build ${EXTRA_BUILDFLAGS} -o $@ -ldflags "-X k8s.io/kops.Version=${VERSION} ${EXTRA_LDFLAGS}" k8s.io/kops/channels/cmd/channels
+	go build ${EXTRA_BUILDFLAGS} -o $@ -ldflags=all="-X k8s.io/kops.Version=${VERSION} ${EXTRA_LDFLAGS}" k8s.io/kops/channels/cmd/channels
 
 # --------------------------------------------------
 # release tasks
@@ -568,7 +568,7 @@ apimachinery:
 
 .PHONY: kops-server-docker-compile
 kops-server-docker-compile:
-	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o ${DIST}/linux/amd64/kops-server -ldflags "${EXTRA_LDFLAGS} -X k8s.io/kops-server.Version=${VERSION} -X k8s.io/kops-server.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops-server
+	GOOS=linux GOARCH=amd64 go build -a ${EXTRA_BUILDFLAGS} -o ${DIST}/linux/amd64/kops-server -ldflags=all="${EXTRA_LDFLAGS} -X k8s.io/kops-server.Version=${VERSION} -X k8s.io/kops-server.GitVersion=${GITSHA}" k8s.io/kops/cmd/kops-server
 
 .PHONY: kops-server-build
 kops-server-build:
